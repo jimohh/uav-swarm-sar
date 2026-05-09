@@ -23,7 +23,8 @@ setup(
         ],
     },
     entry_points={
-        'console_scripts': [
+    'console_scripts': [
+        'probability_map_node = sar_planning.probability_map_node:main',
         ],
     },
 )
