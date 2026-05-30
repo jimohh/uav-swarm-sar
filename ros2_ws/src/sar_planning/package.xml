@@ -19,5 +19,8 @@
 
   <export>
     <build_type>ament_python</build_type>
+    <ros2launch>
+      <launch_files>launch/planning_stack.launch.py</launch_files>
+    </ros2launch>
   </export>
 </package>
