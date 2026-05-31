@@ -142,7 +142,7 @@ class YOLO11sDetector(Node):
         """Run YOLO11s inference or simulate detections."""
         detections = []
 
-        if self.model is not None:
+        if False:  # Force simulation mode for synthetic thermal images
             # Real YOLO11s inference
             import cv2
             frame_bgr = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
