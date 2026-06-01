@@ -23,14 +23,16 @@ setup(
     license='MIT',
     tests_require=['pytest'],
     entry_points={
-    'console_scripts': [
-        'probability_map_node = sar_planning.probability_map_node:main',
-        'waypoint_selector    = sar_planning.waypoint_selector:main',
-        'apf_navigator        = sar_planning.apf_navigator:main',
-        'ekf_node             = sar_planning.ekf_node:main',
-        'thermal_camera_node  = sar_planning.thermal_camera_node:main',
-        'rf_doppler_stub      = sar_planning.rf_doppler_stub:main',
-        'yolo11s_detector     = sar_planning.yolo11s_detector:main',
-    ],
-},
+         'console_scripts': [
+            'probability_map_node = sar_planning.probability_map_node:main',
+            'waypoint_selector    = sar_planning.waypoint_selector:main',
+            'apf_navigator        = sar_planning.apf_navigator:main',
+            'ekf_node             = sar_planning.ekf_node:main',
+            'thermal_camera_node  = sar_planning.thermal_camera_node:main',
+            'rf_doppler_stub      = sar_planning.rf_doppler_stub:main',
+            'yolo11s_detector     = sar_planning.yolo11s_detector:main',
+            'cnp_coordinator      = sar_planning.cnp_coordinator:main',
+            'heartbeat_monitor    = sar_planning.heartbeat_monitor:main',
+        ],
+    },
 )
