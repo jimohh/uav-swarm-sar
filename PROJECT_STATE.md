@@ -36,3 +36,15 @@ cd ~/thesis_ws/uav-swarm-sar/ros2_ws && source /opt/ros/humble/setup.bash && sou
 - Coordination: decentralised auction CNP, NOT leader-follower
 - Swarm: 2x Iris quadrotors + 1x Standard Plane
 - Experimental: 9 conditions x 20 trials = 180 total, ANOVA + Tukey HSD
+
+## Day 4 Status
+- thermal_camera_node: VERIFIED (10 Hz)
+- yolo11s_detector: VERIFIED (model loads, simulation mode working)
+- rf_doppler_stub: packaging issue (main function not found) — fix pending
+- Detection cascade architecture: implemented and individually verified
+
+## Day 5 Next
+- Spawn 2x Iris quadrotors + 1x Standard Plane
+- Implement auction CNP coordinator
+- MAVLink mesh communications
+- Heartbeat-timeout fault tolerance
