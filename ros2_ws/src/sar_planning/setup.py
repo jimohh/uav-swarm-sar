@@ -23,7 +23,7 @@ setup(
     license='MIT',
     tests_require=['pytest'],
     entry_points={
-         'console_scripts': [
+        'console_scripts': [
             'probability_map_node = sar_planning.probability_map_node:main',
             'waypoint_selector    = sar_planning.waypoint_selector:main',
             'apf_navigator        = sar_planning.apf_navigator:main',
@@ -33,6 +33,8 @@ setup(
             'yolo11s_detector     = sar_planning.yolo11s_detector:main',
             'cnp_coordinator      = sar_planning.cnp_coordinator:main',
             'heartbeat_monitor    = sar_planning.heartbeat_monitor:main',
+            'metrics_logger       = sar_planning.metrics_logger:main',
+            'experiment_runner    = sar_planning.experiment_runner:main',
         ],
     },
 )
