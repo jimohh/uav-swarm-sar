@@ -16,7 +16,7 @@
 #   e.g.  bash run_experiments.sh 20 120
 ###############################################################################
 
-set -u
+set -eo pipefail
 
 # --- Configuration ---
 TRIALS_PER_CONDITION=${1:-20}
