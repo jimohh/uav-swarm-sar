@@ -38,11 +38,11 @@ source "$WS_DIR/install/setup.bash"
 
 # --- Cleanup function ---
 cleanup_trial() {
-    pkill -f "px4" 2>/dev/null
-    pkill -f "mavros_node" 2>/dev/null
-    pkill -f "gz sim" 2>/dev/null
-    pkill -f "ruby" 2>/dev/null
-    pkill -f "sar_planning" 2>/dev/null
+    pkill -f "px4" 2>/dev/null || true
+    pkill -f "mavros_node" 2>/dev/null || true
+    pkill -f "gz sim" 2>/dev/null || true
+    pkill -f "ruby" 2>/dev/null || true
+    pkill -f "sar_planning" 2>/dev/null || true
     sleep 3
 }
 
