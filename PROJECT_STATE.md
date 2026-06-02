@@ -48,3 +48,16 @@ cd ~/thesis_ws/uav-swarm-sar/ros2_ws && source /opt/ros/humble/setup.bash && sou
 - Implement auction CNP coordinator
 - MAVLink mesh communications
 - Heartbeat-timeout fault tolerance
+
+## Day 5 Status — COMPLETE
+- PX4 multi-instance: UAV0 (make px4_sitl gz_x500) + UAV1 (direct binary with symlinks)
+- UAV1 launch command: mkdir -p /tmp/px4_instance1 && ln -sf .../etc /tmp/px4_instance1/etc && ln -sf .../bin /tmp/px4_instance1/bin && ./build/px4_sitl_default/bin/px4 -i 1 -s /root/PX4-Autopilot/build/px4_sitl_default/etc/init.d-posix/rcS -w /tmp/px4_instance1
+- CNP coordinator: task announcement + award verified
+- MAVROS: both UAVs connected with heartbeat
+- Topics verified: /sar/cnp/bid, /sar/cnp/swarm_status, /sar/cnp/task_announcement, /sar/cnp/task_award
+
+## Day 6 Next
+- Write batch experiment script (run_experiments.sh)
+- 9 conditions x 20 trials = 180 total runs
+- Log 5 metrics per trial to CSV
+- Run overnight on Droplet
