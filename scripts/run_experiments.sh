@@ -16,7 +16,7 @@
 #   e.g.  bash run_experiments.sh 20 120
 ###############################################################################
 
-set -eo pipefail
+# error handling via || true on individual commands
 
 # --- Configuration ---
 TRIALS_PER_CONDITION=${1:-20}
@@ -48,10 +48,10 @@ cleanup_trial() {
 
 # --- Start PX4 instances ---
 start_px4_instances() {
-    # UAV0
+    # UAV0 — truncate log each trial
     cd "$PX4_DIR"
     export GZ_VERSION=harmonic
-    export PX4_SIM_SPEED_FACTOR=2.0   # speed up for batch runs
+    export PX4_SIM_SPEED_FACTOR=2.0
     HEADLESS=1 make px4_sitl gz_x500 > "$LOG_DIR/px4_uav0.log" 2>&1 &
     sleep 15
 
@@ -122,6 +122,17 @@ run_trial() {
 
     echo "  [Trial $trial_id] $scenario/$planner — starting..."
 
+    # Clean up any leftover processes from previous trial
+    cleanup_trial
+
+    # Truncate logs at start of each trial to prevent disk overflow
+    > "$LOG_DIR/px4_uav0.log"
+    > "$LOG_DIR/px4_uav1.log"
+    > "$LOG_DIR/cnp.log"
+    > "$LOG_DIR/yolo.log"
+    > "$LOG_DIR/mavros_uav0.log"
+    > "$LOG_DIR/mavros_uav1.log"
+
     start_px4_instances
     start_mavros
     start_stack "$scenario" "$planner"
@@ -149,7 +160,6 @@ run_trial() {
     cleanup_trial
     echo "  [Trial $trial_id] $scenario/$planner — done"
 }
-
 ###############################################################################
 # Main experiment loop
 ###############################################################################
