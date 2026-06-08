@@ -26,10 +26,9 @@ PX4_ENV="export GZ_VERSION=harmonic && export PX4_SIM_SPEED_FACTOR=0.5 && export
 tmux kill-session -t "$SESSION" 2>/dev/null || true
 
 echo "Starting tmux session: $SESSION"
-tmux new-session -d -s "$SESSION" -x 220 -y 50
+tmux new-session -d -s "$SESSION" -n "uav0-px4" -x 220 -y 50
 
 # ── Window 0: UAV0 — Iris quadrotor (instance 0) ─────────────────────────
-tmux rename-window -t "$SESSION:0" "uav0-px4"
 tmux send-keys -t "$SESSION:0" \
     "cd $PX4 && $PX4_ENV && make px4_sitl gz_x500" Enter
 
