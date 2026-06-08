@@ -35,6 +35,8 @@ setup(
             'heartbeat_monitor    = sar_planning.heartbeat_monitor:main',
             'metrics_logger       = sar_planning.metrics_logger:main',
             'experiment_runner    = sar_planning.experiment_runner:main',
+            'vfh_navigator        = sar_planning.vfh_navigator:main',
+            'rrtstar_planner      = sar_planning.rrtstar_planner:main',
         ],
     },
 )
