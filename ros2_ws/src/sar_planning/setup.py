@@ -37,6 +37,7 @@ setup(
             'experiment_runner    = sar_planning.experiment_runner:main',
             'vfh_navigator        = sar_planning.vfh_navigator:main',
             'rrtstar_planner      = sar_planning.rrtstar_planner:main',
+            'plane_bridge         = sar_planning.plane_bridge:main',
         ],
     },
 )
