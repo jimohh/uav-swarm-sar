@@ -77,13 +77,14 @@ fast mobile robots." ICRA 1:1572-1577.
 import math
 import numpy as np
 
+from builtin_interfaces import msg
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
 from geometry_msgs.msg import TwistStamped, PointStamped, PoseStamped
 from sensor_msgs.msg import LaserScan
-from std_msgs.msg import Float64, Float32MultiArray
+from std_msgs.msg import Float64, Float32MultiArray, Bool
 from builtin_interfaces.msg import Time
 
 # ---------------------------------------------------------------------------
@@ -176,6 +177,7 @@ class VFHNavigator(Node):
         self.pub_cmd   = self.create_publisher(TwistStamped,       f'{ns}/vfh/cmd_vel',   reliable_qos)
         self.pub_hdg   = self.create_publisher(Float64,            f'{ns}/vfh/heading',   reliable_qos)
         self.pub_hist  = self.create_publisher(Float32MultiArray,  f'{ns}/vfh/histogram', reliable_qos)
+        self.pub_hb    = self.create_publisher(Bool, f'{ns}/heartbeat', reliable_qos)
 
         # ── State ────────────────────────────────────────────────────────
         self.goal:       PointStamped | None = None
@@ -186,6 +188,7 @@ class VFHNavigator(Node):
 
         # ── Main control loop ─────────────────────────────────────────────
         self.timer = self.create_timer(0.1, self._control_loop)   # 10 Hz
+        self.hb_timer = self.create_timer(1.0, self._heartbeat_loop)  # 1 Hz
 
         self.get_logger().info(
             f'VFHNavigator started — UAV {p["uav_id"]} | '
@@ -460,6 +463,10 @@ class VFHNavigator(Node):
         cmd.header.stamp    = self.get_clock().now().to_msg()
         cmd.header.frame_id = 'map'
         self.pub_cmd.publish(cmd)
+    def _heartbeat_loop(self):
+        msg = Bool()
+        msg.data = True
+        self.pub_hb.publish(msg)
 
 
 # ---------------------------------------------------------------------------
