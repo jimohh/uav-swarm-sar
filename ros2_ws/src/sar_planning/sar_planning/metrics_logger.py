@@ -29,14 +29,14 @@ class MetricsLogger(Node):
         self.declare_parameter('trial_id', 0)
         self.declare_parameter('scenario', 'urban')
         self.declare_parameter('planner', 'apf')
-        self.declare_parameter('trial_duration', 120.0)  # seconds
+        self.declare_parameter('trial_duration', 120)  # seconds
         self.declare_parameter('results_dir',
             '/root/thesis_ws/results')
 
         self.trial_id      = self.get_parameter('trial_id').value
         self.scenario      = self.get_parameter('scenario').value
         self.planner       = self.get_parameter('planner').value
-        self.duration      = self.get_parameter('trial_duration').value
+        self.duration      = int(self.get_parameter('trial_duration').value)
         self.results_dir   = self.get_parameter('results_dir').value
 
         # Metrics state
