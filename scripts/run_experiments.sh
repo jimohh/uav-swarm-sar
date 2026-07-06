@@ -186,12 +186,25 @@ run_trial() {
         -p results_dir:="$RESULTS_DIR" \
         > "$LOG_DIR/metrics_${scenario}_${planner}_${trial_id}.log" 2>&1 &
 
+    # HARD TIMEOUT: experiment_runner must never be allowed to hang forever.
+    # If it doesn't return within trial_duration + 30s buffer, force-kill it
+    # so the batch can move on to the next trial instead of stalling.
+    timeout --signal=KILL "$((TRIAL_DURATION + 30))" \
     ros2 run sar_planning experiment_runner --ros-args \
         -p trial_id:="$trial_id" \
         -p scenario:="$scenario" \
         -p planner:="$planner" \
         -p trial_duration:="$TRIAL_DURATION" \
         > "$LOG_DIR/runner_${scenario}_${planner}_${trial_id}.log" 2>&1
+    RUNNER_EXIT=$?
+
+    if [ "$RUNNER_EXIT" -eq 137 ] || [ "$RUNNER_EXIT" -eq 124 ]; then
+        echo "  [Trial $trial_id] $scenario/$planner — WARNING: experiment_runner timed out and was killed"
+    fi
+
+    # Kill metrics_logger explicitly too — it may still be waiting on the
+    # same stuck condition that caused experiment_runner to hang.
+    pkill -9 -f "metrics_logger" 2>/dev/null || true
 
     sleep 5
     cleanup_trial
