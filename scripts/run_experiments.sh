@@ -42,6 +42,7 @@ cleanup_trial() {
     pkill -f "gz sim" 2>/dev/null || true
     pkill -f "ruby" 2>/dev/null || true
     pkill -f "sar_planning" 2>/dev/null || true
+    rm -rf /tmp/px4_instance0 /tmp/px4_instance1 /tmp/px4_instance2 2>/dev/null || true
     sleep 3
 }
 
@@ -51,7 +52,15 @@ start_px4_instances() {
     cd "$PX4_DIR"
     export GZ_VERSION=harmonic
     export PX4_SIM_SPEED_FACTOR=2.0
-    HEADLESS=1 make px4_sitl gz_x500 > "$LOG_DIR/px4_uav0.log" 2>&1 &
+    mkdir -p /tmp/px4_instance0
+    ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance0/etc
+    ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance0/bin
+    export PX4_GZ_MODEL=x500
+    export PX4_GZ_MODEL_POSE="0,0,0,0,0,0"
+    "$PX4_DIR/build/px4_sitl_default/bin/px4" \
+        -i 0 \
+        -s "$PX4_DIR/build/px4_sitl_default/etc/init.d-posix/rcS" \
+        -w /tmp/px4_instance0 > "$LOG_DIR/px4_uav0.log" 2>&1 &
     sleep 15
 
     # UAV1 — Iris quadrotor
