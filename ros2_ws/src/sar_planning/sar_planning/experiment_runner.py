@@ -32,7 +32,7 @@ class ExperimentRunner(Node):
         self.declare_parameter('trial_id', 0)
         self.declare_parameter('scenario', 'urban')
         self.declare_parameter('planner', 'apf')
-        self.declare_parameter('trial_duration', 120.0)
+        self.declare_parameter('trial_duration', 120)
         self.declare_parameter('num_uavs', 2)
 
         self.trial_id  = self.get_parameter('trial_id').value
