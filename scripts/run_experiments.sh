@@ -26,6 +26,7 @@ mkdir -p "$LOG_DIR"
 
 source /opt/ros/humble/setup.bash
 source "$WS_DIR/install/setup.bash"
+export PYTHONUNBUFFERED=1
 
 # --- Hardened cleanup function ---
 # Kills every process from the previous trial AND removes any stale PX4
