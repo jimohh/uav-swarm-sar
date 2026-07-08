@@ -20,11 +20,11 @@ tmux send-keys -t "$SESSION:uav1-px4" "sleep 10 && mkdir -p /tmp/px4_instance1 &
 
 tmux send-keys -t "$SESSION:uav2-px4" "sleep 20 && mkdir -p /tmp/px4_instance2 && ln -sf $PX4/build/px4_sitl_default/etc /tmp/px4_instance2/etc && ln -sf $PX4/build/px4_sitl_default/bin /tmp/px4_instance2/bin && cd $PX4 && export GZ_VERSION=harmonic && export PX4_SIM_SPEED_FACTOR=0.5 && export HEADLESS=1 && export PX4_GZ_MODEL=standard_vtol && export PX4_GZ_MODEL_POSE='20,0,0,0,0,0' && ./build/px4_sitl_default/bin/px4 -i 2 -s $PX4/build/px4_sitl_default/etc/init.d-posix/rcS -w /tmp/px4_instance2" Enter
 
-tmux send-keys -t "$SESSION:mavros0" "sleep 30 && source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://:14540@localhost:14550 -p system_id:=1 --remap __ns:=/uav0" Enter
+tmux send-keys -t "$SESSION:mavros0" "sleep 30 && source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://:14540@localhost:14550 -p system_id:=1 --remap __ns:=/uav0/mavros" Enter
 
-tmux send-keys -t "$SESSION:mavros1" "sleep 32 && source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://:14541@localhost:14560 -p system_id:=2 --remap __ns:=/uav1" Enter
+tmux send-keys -t "$SESSION:mavros1" "sleep 32 && source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://:14541@localhost:14560 -p system_id:=2 --remap __ns:=/uav1/mavros" Enter
 
-tmux send-keys -t "$SESSION:mavros2" "sleep 34 && source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://:14542@localhost:14570 -p system_id:=3 --remap __ns:=/uav2" Enter
+tmux send-keys -t "$SESSION:mavros2" "sleep 34 && source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p fcu_url:=udp://:14542@localhost:14570 -p system_id:=3 --remap __ns:=/uav2/mavros" Enter
 
 tmux send-keys -t "$SESSION:ros-nodes" "sleep 40 && source /opt/ros/humble/setup.bash && source $WS/install/setup.bash && ros2 run sar_planning cnp_coordinator & ros2 run sar_planning heartbeat_monitor & ros2 run sar_planning probability_map_node & wait" Enter
 

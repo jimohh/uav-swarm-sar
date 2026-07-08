@@ -27,7 +27,6 @@ mkdir -p "$LOG_DIR"
 source /opt/ros/humble/setup.bash
 source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
-
 # --- Hardened cleanup function ---
 # Kills every process from the previous trial AND removes any stale PX4
 # lock/rootfs artifacts that cause "PX4 server already running" errors.
@@ -85,19 +84,19 @@ start_px4_instances() {
 start_mavros() {
     ros2 run mavros mavros_node --ros-args \
         -p fcu_url:=udp://:14540@localhost:14550 \
-        -p system_id:=1 --remap __ns:=/uav0 \
+        -p system_id:=1 --remap __ns:=/uav0/mavros \
         > "$LOG_DIR/mavros_uav0.log" 2>&1 &
     sleep 5
 
     ros2 run mavros mavros_node --ros-args \
         -p fcu_url:=udp://:14541@localhost:14560 \
-        -p system_id:=2 --remap __ns:=/uav1 \
+        -p system_id:=2 --remap __ns:=/uav1/mavros \
         > "$LOG_DIR/mavros_uav1.log" 2>&1 &
     sleep 5
 
     ros2 run mavros mavros_node --ros-args \
         -p fcu_url:=udp://:14542@localhost:14570 \
-        -p system_id:=3 --remap __ns:=/uav2 \
+        -p system_id:=3 --remap __ns:=/uav2/mavros \
         > "$LOG_DIR/mavros_uav2.log" 2>&1 &
     sleep 8
 }
