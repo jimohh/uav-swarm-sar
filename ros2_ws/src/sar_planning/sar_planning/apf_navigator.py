@@ -10,6 +10,7 @@ Artificial Potential Field navigator for SAR UAV.
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from geometry_msgs.msg import PoseArray, TwistStamped, PoseStamped
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
@@ -23,7 +24,7 @@ class APFNavigator(Node):
         super().__init__('apf_navigator')
 
         # --- Parameters ---
-        self.declare_parameter('uav_ns', 'uav0')
+        self.declare_parameter('uav_id', 0)
         self.declare_parameter('attractive_gain', 1.5)
         self.declare_parameter('repulsive_gain', 2.0)
         self.declare_parameter('repulsive_radius', 5.0)   # metres
@@ -31,7 +32,8 @@ class APFNavigator(Node):
         self.declare_parameter('arrival_threshold', 2.0)   # metres
         self.declare_parameter('cruise_altitude', 10.0)    # metres
 
-        ns          = self.get_parameter('uav_ns').value
+        uav_id      = self.get_parameter('uav_id').value
+        ns          = f'uav{uav_id}'
         self.k_att  = self.get_parameter('attractive_gain').value
         self.k_rep  = self.get_parameter('repulsive_gain').value
         self.r_rep  = self.get_parameter('repulsive_radius').value
@@ -46,10 +48,15 @@ class APFNavigator(Node):
         self.obstacles   = []     # list of (x, y) obstacle positions
 
         # --- Subscribers ---
+        sensor_qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=10,
+        )
         self.create_subscription(
             Odometry,
             f'/{ns}/mavros/local_position/odom',
-            self._odom_callback, 10)
+            self._odom_callback, sensor_qos)
 
         self.create_subscription(
             PoseArray,

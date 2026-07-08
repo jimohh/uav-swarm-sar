@@ -11,6 +11,7 @@ Logs five metrics per trial to CSV:
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry
 import csv
@@ -72,12 +73,18 @@ class MetricsLogger(Node):
             String, '/sar/fault/recovery',
             self._fault_recovery_callback, 10)
 
+        sensor_qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=10,
+        )
+
         for i in range(3):
             self.create_subscription(
                 Odometry,
                 f'/uav{i}/mavros/local_position/odom',
                 lambda msg, uid=i: self._odom_callback(msg, uid),
-                10)
+                sensor_qos)
 
         # Trial timer
         self.create_timer(1.0, self._update_metrics)
