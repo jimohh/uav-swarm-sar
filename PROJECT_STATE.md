@@ -75,3 +75,162 @@ source /opt/ros/humble/setup.bash && ros2 run mavros mavros_node --ros-args -p f
 - Repo: https://github.com/jimohh/uav-swarm-sar
 - Auth: PAT stored via git credential.helper store
 - WSL2 alias: droplet = ssh root@64.227.35.132
+
+# PROJECT_STATE.md — UAV Swarm SAR Thesis
+
+**Last updated:** 2026-07-08 22:00 UTC
+
+## Purpose & context
+Final-year thesis: "Heterogeneous UAV Swarm: Design and Development of a Hybrid
+Control Architecture for Distributed Search and Rescue Operations." Comparing
+APF / VFH+ / Informed RRT* navigation planners across urban/wilderness/maritime
+SAR scenarios using a 3-UAV heterogeneous swarm (2× Iris quad + 1× Standard
+Plane) in ROS 2 Humble / Gazebo Harmonic / PX4 SITL on a DigitalOcean Droplet
+(IP 64.227.35.132, 4vCPU/8GB, London).
+
+Experimental design: 3 planners × 3 scenarios × 20 trials = 180-trial full
+factorial, two-factor ANOVA + Bonferroni-corrected pairwise comparisons, α=0.05.
+Five metrics logged per trial: coverage_rate, time_to_detection, path_efficiency,
+inter_agent_distance, fault_recovery_time.
+
+## Infrastructure
+- **Droplet:** `uav-swarm-sim`, 64.227.35.132, Ubuntu 22.04, London (LON1)
+- **Repo:** `github.com/jimohh/uav-swarm-sar` (PUBLIC)
+- **WSL2 path:** `~/uav-swarm-sar`
+- **Droplet path:** `~/thesis_ws/uav-swarm-sar`
+- **ROS workspace:** `~/thesis_ws/uav-swarm-sar/ros2_ws`
+- **Results dir:** `~/thesis_ws/results/{urban,wilderness,maritime}/`
+- **Analysis dir:** `~/thesis_ws/analysis/`
+- **tmux session:** `swarm` with windows: uav0-px4, uav1-px4, uav2-px4,
+  mavros0, mavros1, mavros2, ros-nodes, monitor, shell
+- **Workflow:** edit in VS Code (WSL2) → git push → git pull on Droplet → rebuild
+- **SSH fallback:** port 443 configured in sshd_config if port 22 blocked
+
+## Revised 7-day plan status
+- Day 1 (VFH+ & RRT*): ✅ Complete
+- Day 2 (UAV2 Standard Plane): ✅ Complete
+- Day 3 (rf_doppler fix): ✅ Complete
+- Day 4 (3-agent integration test): ✅ Complete
+- Day 5 (script fixes): ✅ Complete
+- Day 6 (180 trials): 🔄 In progress — 3rd attempt running (smoke test at 120s
+  just confirmed real data flowing; full batch about to launch)
+- Day 7 (ANOVA + thesis): ⏳ Pending
+
+## Current state — Day 6, launching 3rd (clean) batch run
+
+### Bugs fixed (all confirmed resolved, do NOT reintroduce)
+
+**1. rf_doppler_stub.py was empty**
+→ Rewritten from scratch (Day 3)
+
+**2. PX4 stale lock files**
+→ `cleanup_trial()` now does `pkill -9` + removes `/tmp/px4_instance*` +
+  `rm -rf $PX4_DIR/build/px4_sitl_default/rootfs/lock` before every trial
+
+**3. rclpy.shutdown() race condition (experiment_runner + metrics_logger)**
+→ Removed `rclpy.shutdown()` from `_end_trial()` timer callbacks in both files.
+  Replaced `rclpy.spin()` in `main()` with manual
+  `while rclpy.ok() and not node.trial_complete: rclpy.spin_once(...)` loop.
+
+**4. trial_duration INTEGER vs DOUBLE mismatch**
+→ Both `metrics_logger.py` and `experiment_runner.py` now declare
+  `trial_duration` as integer default (`120` not `120.0`).
+
+**5. experiment_runner hanging forever (no timeout)**
+→ Wrapped `experiment_runner` call in `run_experiments.sh` with
+  `timeout --signal=KILL "$((TRIAL_DURATION + 30))"`.
+  Also explicitly kills `metrics_logger` after timeout.
+
+**6. Missing UAV2 in experiments**
+→ Added PX4 instance 2 (standard_vtol), MAVROS for uav2, and `plane_bridge`
+  to `run_experiments.sh`.
+
+**7. Planner never switched between conditions**
+→ Added `case "$planner"` block in `start_stack()` launching:
+  - apf: apf_navigator only
+  - vfh: apf_navigator + vfh_navigator
+  - rrtstar: apf_navigator + vfh_navigator + rrtstar_planner
+
+**8. Double-length trials**
+→ Removed redundant `sleep $TRIAL_DURATION` after `experiment_runner` already
+  blocked for that duration internally.
+
+**9. MAVROS wrong namespace remap**
+→ Changed `--remap __ns:=/uav{N}` to `--remap __ns:=/uav{N}/mavros` in both
+  `run_experiments.sh` (start_mavros function) and `launch_swarm.sh`.
+  This was causing ALL MAVROS topics to publish under `/uav{N}/...` instead of
+  the `/uav{N}/mavros/...` path that every Python node subscribes to.
+
+**10. apf_navigator wrong parameter name (critical)**
+→ `apf_navigator.py` was declaring `uav_ns` but `run_experiments.sh` was
+  passing `uav_id`. Both UAV0 and UAV1 APF navigators silently defaulted to
+  `uav0` every trial. Fixed: changed `declare_parameter('uav_ns', 'uav0')` to
+  `declare_parameter('uav_id', 0)` and derived `ns = f'uav{uav_id}'`.
+  This was causing `inter_agent_distance` and `path_efficiency` to be zero.
+
+**11. QoS mismatch on odometry subscriptions (critical)**
+→ MAVROS publishes `/uav{N}/mavros/local_position/odom` with
+  QoS=BEST_EFFORT. Both `metrics_logger.py` and `apf_navigator.py` were
+  subscribing with default QoS=RELIABLE. In ROS 2/DDS a RELIABLE subscriber
+  silently never connects to a BEST_EFFORT publisher — no error, just zero data.
+  Fixed: added explicit `QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT,
+  history=HistoryPolicy.KEEP_LAST, depth=10)` to both odometry subscriptions.
+
+**12. tmux window naming/targeting bugs in launch_swarm.sh**
+→ Fixed by creating all windows upfront before sending any keys, using
+  `-n "window-name"` at creation time instead of separate rename commands.
+
+**13. Resume feature added to run_experiments.sh**
+→ `count_completed()` function checks existing CSV row counts before each
+  condition; skips already-complete conditions automatically on relaunch.
+
+## Immediate next steps (in new chat)
+1. **Confirm smoke test (1 trial × 9 conditions × 120s) shows non-zero
+   coverage_rate, path_efficiency, inter_agent_distance** in all 9 CSVs
+2. If confirmed: clear all results and launch full 180-trial batch:
+```bash
+   rm -f ~/thesis_ws/results/urban/*.csv
+   rm -f ~/thesis_ws/results/wilderness/*.csv
+   rm -f ~/thesis_ws/results/maritime/*.csv
+   rm -rf ~/thesis_ws/logs/*
+   cd ~/thesis_ws/uav-swarm-sar
+   nohup bash scripts/run_experiments.sh 20 120 > ~/thesis_ws/logs/batch_run.log 2>&1 &
+   echo $!
+```
+3. Monitor periodically:
+```bash
+   tail -5 ~/thesis_ws/logs/batch_run.log
+   watch -n 30 'find ~/thesis_ws/results -name "*.csv" -exec tail -1 {} \; -print'
+```
+4. Once complete: run analysis:
+```bash
+   python3 scripts/analyse_results.py ~/thesis_ws/results ~/thesis_ws/analysis
+```
+5. Populate `chapter4_results_skeleton.docx` with real figures and stats
+
+## Key files
+- `scripts/run_experiments.sh` — main batch orchestration (resume-capable)
+- `scripts/launch_swarm.sh` — interactive manual launch
+- `scripts/analyse_results.py` — generates 7 figures + ANOVA + summary CSV
+- `scripts/record_demo_bag.sh` — records rosbag for RViz playback on WSL2
+- `ros2_ws/src/sar_planning/sar_planning/` — all ROS 2 nodes
+- `ros2_ws/src/sar_planning/launch/` — nav_stack.launch.py, rviz_visualization.launch.py
+- `ros2_ws/src/sar_planning/rviz/sar_swarm.rviz` — RViz config
+- `chapter4_results_skeleton.docx` — thesis Chapter 4 template with placeholders
+
+## Nodes implemented
+apf_navigator, vfh_navigator, rrtstar_planner, plane_bridge, rf_doppler_stub,
+cnp_coordinator, heartbeat_monitor, metrics_logger, experiment_runner,
+probability_map_node, waypoint_selector, thermal_camera_node, yolo11s_detector,
+ekf_node
+
+## Analysis outputs (once batch completes)
+- `~/thesis_ws/analysis/figures/bar_coverage_rate.png`
+- `~/thesis_ws/analysis/figures/bar_time_to_detection.png`
+- `~/thesis_ws/analysis/figures/bar_path_efficiency.png`
+- `~/thesis_ws/analysis/figures/bar_inter_agent_distance.png`
+- `~/thesis_ws/analysis/figures/bar_fault_recovery_time.png`
+- `~/thesis_ws/analysis/figures/boxplot_all_metrics.png`
+- `~/thesis_ws/analysis/figures/heatmap_performance.png`
+- `~/thesis_ws/analysis/summary_stats.csv`
+- `~/thesis_ws/analysis/anova_results.txt`
