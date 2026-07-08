@@ -207,20 +207,23 @@ class MetricsLogger(Node):
             f'Trial {self.trial_id} complete — '
             f'coverage={coverage:.3f}, ttd=None')
 
-        rclpy.shutdown()
 
 
 def main(args=None):
     rclpy.init(args=args)
     node = MetricsLogger()
     try:
-        rclpy.spin(node)
-    except (KeyboardInterrupt, Exception):
+        while rclpy.ok() and not node.trial_complete:
+            rclpy.spin_once(node, timeout_sec=0.1)
+        rclpy.spin_once(node, timeout_sec=0.5)
+    except KeyboardInterrupt:
         pass
     finally:
         if not node.trial_complete:
             node._end_trial()
         node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':

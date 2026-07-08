@@ -143,19 +143,24 @@ class ExperimentRunner(Node):
         self.get_logger().info(
             f'Trial {self.trial_id} complete '
             f'({elapsed:.1f}s)')
-
-        rclpy.shutdown()
-
+        # NOTE: rclpy.shutdown() removed from here — calling shutdown from
+        # inside a timer callback while spin() is active is a race condition
+        # that can deadlock the executor instead of exiting. main() now
+        # handles shutdown safely after spin exits.
 
 def main(args=None):
     rclpy.init(args=args)
     node = ExperimentRunner()
     try:
-        rclpy.spin(node)
-    except (KeyboardInterrupt, Exception):
+        while rclpy.ok() and not node.trial_complete:
+            rclpy.spin_once(node, timeout_sec=0.1)
+        rclpy.spin_once(node, timeout_sec=0.5)  # let final publish flush
+    except KeyboardInterrupt:
         pass
     finally:
         node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':
