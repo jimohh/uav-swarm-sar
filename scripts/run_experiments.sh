@@ -49,6 +49,21 @@ cleanup_trial() {
     sleep 5   # give the OS time to release ports/sockets before next trial
 }
 
+# --- Arm and switch a quadrotor UAV into OFFBOARD mode ---
+# PX4 requires setpoints streaming at >2Hz for ~1s before it accepts an
+# OFFBOARD mode request. apf_navigator runs at 20Hz, so by the time this
+# is called (after start_stack's existing sleep 5) that's satisfied.
+# NOTE: UAV2 (plane_bridge.py) already self-arms/self-switches — do not
+# call this for uav_id=2.
+arm_and_offboard() {
+    local uav_id=$1
+    ros2 service call /uav${uav_id}/mavros/cmd/arming mavros_msgs/srv/CommandBool \
+        "{value: true}" > "$LOG_DIR/arm_uav${uav_id}.log" 2>&1
+    sleep 1
+    ros2 service call /uav${uav_id}/mavros/set_mode mavros_msgs/srv/SetMode \
+        "{custom_mode: 'OFFBOARD'}" > "$LOG_DIR/mode_uav${uav_id}.log" 2>&1
+}
+
 # --- Start PX4 instances (3 UAVs: 2 quads + 1 plane) ---
 start_px4_instances() {
     cd "$PX4_DIR"
@@ -147,8 +162,14 @@ start_stack() {
             return 1
             ;;
     esac
+    
 
     sleep 5
+
+    # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
+    # UAV0/UAV1 quads have no such logic in apf_navigator — do it here.
+    arm_and_offboard 0
+    arm_and_offboard 1
 }
 
 # --- Run a single trial ---
