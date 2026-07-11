@@ -180,6 +180,10 @@ start_stack() {
 
     sleep 5
 
+    # Wait for Gazebo sensors and EKF2 to initialize before arming.
+    # Without this delay, PX4 rejects arming due to uncalibrated sensors.
+    sleep 20
+
     # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
     # UAV0/UAV1 quads have no such logic in apf_navigator — do it here.
     arm_and_offboard 0
