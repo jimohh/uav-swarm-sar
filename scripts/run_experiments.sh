@@ -27,6 +27,22 @@ mkdir -p "$LOG_DIR"
 source /opt/ros/humble/setup.bash
 source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
+
+# --- PX4 parameter overrides applied AFTER the airframe file is sourced ---
+# PX4's rcS has a built-in mechanism: any PX4_PARAM_<NAME> env var is
+# applied via `param set` after the airframe file runs, so these cannot
+# be silently overwritten the way editing rcS directly was (the airframe
+# file 4001_gz_x500 sets NAV_DLL_ACT=2, which clobbered our earlier
+# rcS-based edit).
+export PX4_PARAM_NAV_DLL_ACT=0        # disable "no GCS connection" arming check
+export PX4_PARAM_SYS_HAS_MAG=0        # no magnetometer required
+export PX4_PARAM_SYS_HAS_BARO=0       # no barometer required
+export PX4_PARAM_EKF2_MAG_TYPE=5      # disable EKF2 magnetic heading fusion
+export PX4_PARAM_CBRK_SUPPLY_CHK=894281
+export PX4_PARAM_EKF2_GPS_CTRL=0      # disable GPS-based heading requirement
+export PX4_PARAM_ATT_W_MAG=0          # remove magnetometer weight from attitude estimator
+export PX4_PARAM_EKF2_HGT_REF=0       # remove height reference requirement
+
 # --- Hardened cleanup function ---
 # Kills every process from the previous trial AND removes any stale PX4
 # lock/rootfs artifacts that cause "PX4 server already running" errors.
@@ -176,12 +192,12 @@ start_stack() {
             return 1
             ;;
     esac
-    
+
 
     sleep 5
 
-    # Wait for Gazebo sensors and EKF2 to initialize before arming.
-    # Without this delay, PX4 rejects arming due to uncalibrated sensors.
+    # Wait for Gazebo sensors and EKF2 to initialize/converge before arming.
+    # Without this delay, PX4 rejects arming due to EKF yaw not yet aligned.
     sleep 20
 
     # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
