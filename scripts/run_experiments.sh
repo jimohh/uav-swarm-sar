@@ -107,19 +107,25 @@ start_px4_instances() {
 start_mavros() {
     ros2 run mavros mavros_node --ros-args \
         -p fcu_url:=udp://:14540@localhost:14550 \
-        -p system_id:=1 --remap __ns:=/uav0/mavros \
+        -p system_id:=1 \
+        -p heartbeat_mav_type:=GCS \
+        --remap __ns:=/uav0/mavros \
         > "$LOG_DIR/mavros_uav0.log" 2>&1 &
     sleep 5
 
     ros2 run mavros mavros_node --ros-args \
         -p fcu_url:=udp://:14541@localhost:14560 \
-        -p system_id:=2 --remap __ns:=/uav1/mavros \
+        -p system_id:=2 \
+        -p heartbeat_mav_type:=GCS \
+        --remap __ns:=/uav1/mavros \
         > "$LOG_DIR/mavros_uav1.log" 2>&1 &
     sleep 5
 
     ros2 run mavros mavros_node --ros-args \
         -p fcu_url:=udp://:14542@localhost:14570 \
-        -p system_id:=3 --remap __ns:=/uav2/mavros \
+        -p system_id:=3 \
+        -p heartbeat_mav_type:=GCS \
+        --remap __ns:=/uav2/mavros \
         > "$LOG_DIR/mavros_uav2.log" 2>&1 &
     sleep 8
 }
