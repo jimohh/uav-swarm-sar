@@ -28,13 +28,15 @@ source /opt/ros/humble/setup.bash
 source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
 
-# --- PX4 parameter override ---
-# NAV_DLL_ACT=0 disables the "no GCS connection" arming check.
-# heartbeat_mav_type:=GCS (set in start_mavros) satisfies the check anyway,
-# but this ensures it's disabled even if the heartbeat races with the arm call.
-# All other PX4_PARAM_* overrides removed — they were treating symptoms of
-# the wrong Gazebo model name (gz_x500 instead of x500), not real issues.
+# --- PX4 parameter overrides ---
+# NAV_DLL_ACT=0: disables "no GCS connection" arming check.
+# SIM_GZ_EN=1: forces Gazebo sensor pipeline. Without this, PX4 falls back
+# to its internal SIH simulator which doesn't publish accelerometer data,
+# causing "Accel 0 uncalibrated" and "Gyro 0 uncalibrated" pre-arm failures.
+# Both are applied via PX4_PARAM_* env vars which run AFTER the airframe file,
+# so they cannot be silently overwritten by airframe defaults.
 export PX4_PARAM_NAV_DLL_ACT=0
+export PX4_PARAM_SIM_GZ_EN=1
 
 # --- Hardened cleanup function ---
 cleanup_trial() {
