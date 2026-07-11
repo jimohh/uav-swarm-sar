@@ -28,24 +28,15 @@ source /opt/ros/humble/setup.bash
 source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
 
-# --- PX4 parameter overrides applied AFTER the airframe file is sourced ---
-# PX4's rcS has a built-in mechanism: any PX4_PARAM_<NAME> env var is
-# applied via `param set` after the airframe file runs, so these cannot
-# be silently overwritten the way editing rcS directly was (the airframe
-# file 4001_gz_x500 sets NAV_DLL_ACT=2, which clobbered our earlier
-# rcS-based edit).
-export PX4_PARAM_NAV_DLL_ACT=0        # disable "no GCS connection" arming check
-export PX4_PARAM_SYS_HAS_MAG=0        # no magnetometer required
-export PX4_PARAM_SYS_HAS_BARO=0       # no barometer required
-export PX4_PARAM_EKF2_MAG_TYPE=5      # disable EKF2 magnetic heading fusion
-export PX4_PARAM_CBRK_SUPPLY_CHK=894281
-export PX4_PARAM_EKF2_GPS_CTRL=0      # disable GPS-based heading requirement
-export PX4_PARAM_ATT_W_MAG=0          # remove magnetometer weight from attitude estimator
-export PX4_PARAM_EKF2_HGT_REF=0       # remove height reference requirement
+# --- PX4 parameter override ---
+# NAV_DLL_ACT=0 disables the "no GCS connection" arming check.
+# heartbeat_mav_type:=GCS (set in start_mavros) satisfies the check anyway,
+# but this ensures it's disabled even if the heartbeat races with the arm call.
+# All other PX4_PARAM_* overrides removed — they were treating symptoms of
+# the wrong Gazebo model name (gz_x500 instead of x500), not real issues.
+export PX4_PARAM_NAV_DLL_ACT=0
 
 # --- Hardened cleanup function ---
-# Kills every process from the previous trial AND removes any stale PX4
-# lock/rootfs artifacts that cause "PX4 server already running" errors.
 cleanup_trial() {
     pkill -9 -f "px4"              2>/dev/null || true
     pkill -9 -f "mavros_node"      2>/dev/null || true
@@ -54,23 +45,14 @@ cleanup_trial() {
     pkill -9 -f "ruby"             2>/dev/null || true
     pkill -9 -f "sar_planning"     2>/dev/null || true
 
-    # Remove PX4 SITL working directories — these hold the lock files that
-    # cause "PX4 server already running for instance N" on the next start.
     rm -rf /tmp/px4_instance0 /tmp/px4_instance1 /tmp/px4_instance2 2>/dev/null || true
     rm -f  /tmp/px4_lock* /tmp/.px4* 2>/dev/null || true
-
-    # The make-based UAV0 launch also leaves a rootfs dir with its own lock
     rm -rf "$PX4_DIR/build/px4_sitl_default/rootfs/lock" 2>/dev/null || true
 
-    sleep 5   # give the OS time to release ports/sockets before next trial
+    sleep 5
 }
 
 # --- Arm and switch a quadrotor UAV into OFFBOARD mode ---
-# PX4 requires setpoints streaming at >2Hz for ~1s before it accepts an
-# OFFBOARD mode request. apf_navigator runs at 20Hz, so by the time this
-# is called (after start_stack's existing sleep 5) that's satisfied.
-# NOTE: UAV2 (plane_bridge.py) already self-arms/self-switches — do not
-# call this for uav_id=2.
 arm_and_offboard() {
     local uav_id=$1
     ros2 service call /uav${uav_id}/mavros/cmd/arming mavros_msgs/srv/CommandBool \
@@ -86,9 +68,9 @@ start_px4_instances() {
     ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance0/etc
     ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance0/bin
     export GZ_VERSION=harmonic
-    export PX4_SIM_SPEED_FACTOR=2.0
+    export PX4_SIM_SPEED_FACTOR=1.0
     export HEADLESS=1
-    export PX4_GZ_MODEL=gz_x500
+    export PX4_GZ_MODEL=x500
     export PX4_GZ_MODEL_POSE="0,0,0,0,0,0"
     "$PX4_DIR/build/px4_sitl_default/bin/px4" \
         -i 0 \
@@ -99,6 +81,7 @@ start_px4_instances() {
     mkdir -p /tmp/px4_instance1
     ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance1/etc
     ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance1/bin
+    export PX4_GZ_MODEL=x500
     export PX4_GZ_MODEL_POSE="10,0,0,0,0,0"
     "$PX4_DIR/build/px4_sitl_default/bin/px4" \
         -i 1 \
@@ -193,11 +176,9 @@ start_stack() {
             ;;
     esac
 
-
     sleep 5
 
-    # Wait for Gazebo sensors and EKF2 to initialize/converge before arming.
-    # Without this delay, PX4 rejects arming due to EKF yaw not yet aligned.
+    # Wait for EKF2 to converge and sensors to initialize before arming.
     sleep 20
 
     # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
@@ -241,9 +222,6 @@ run_trial() {
         -p results_dir:="$RESULTS_DIR" \
         > "$LOG_DIR/metrics_${scenario}_${planner}_${trial_id}.log" 2>&1 &
 
-    # HARD TIMEOUT: experiment_runner must never be allowed to hang forever.
-    # If it doesn't return within trial_duration + 30s buffer, force-kill it
-    # so the batch can move on to the next trial instead of stalling.
     timeout --signal=KILL "$((TRIAL_DURATION + 30))" \
     ros2 run sar_planning experiment_runner --ros-args \
         -p trial_id:="$trial_id" \
@@ -257,8 +235,6 @@ run_trial() {
         echo "  [Trial $trial_id] $scenario/$planner — WARNING: experiment_runner timed out and was killed"
     fi
 
-    # Kill metrics_logger explicitly too — it may still be waiting on the
-    # same stuck condition that caused experiment_runner to hang.
     pkill -9 -f "metrics_logger" 2>/dev/null || true
 
     sleep 5
@@ -274,7 +250,7 @@ count_completed() {
     if [ -f "$csv" ]; then
         local lines
         lines=$(wc -l < "$csv")
-        echo $(( lines > 0 ? lines - 1 : 0 ))   # subtract header row
+        echo $(( lines > 0 ? lines - 1 : 0 ))
     else
         echo 0
     fi
