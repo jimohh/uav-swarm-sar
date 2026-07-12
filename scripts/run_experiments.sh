@@ -46,9 +46,6 @@ export PYTHONUNBUFFERED=1
 export PX4_PARAM_NAV_DLL_ACT=0
 export PX4_PARAM_SIM_GZ_EN=1
 export PX4_PARAM_CBRK_SUPPLY_CHK=894281
-export PX4_PARAM_SYS_HAS_MAG=0
-export PX4_PARAM_EKF2_MAG_TYPE=5
-export PX4_PARAM_COM_ARM_WO_GPS=1
 
 # --- Hardened cleanup function ---
 cleanup_trial() {
@@ -65,7 +62,7 @@ cleanup_trial() {
 
     # Wipe stale PX4 parameter files to force clean boot every trial
     find "$PX4_DIR/build/px4_sitl_default" -name "parameters*.bson" -delete 2>/dev/null || true
-    
+
     sleep 5
 }
 
@@ -87,7 +84,7 @@ start_px4_instances() {
     export GZ_VERSION=harmonic
     export PX4_SIM_SPEED_FACTOR=1.0
     export HEADLESS=1
-    export PX4_GZ_MODEL=x500
+    export PX4_GZ_MODEL=standard_vtol
     export PX4_GZ_MODEL_POSE="0,0,0,0,0,0"
     "$PX4_DIR/build/px4_sitl_default/bin/px4" \
         -i 0 \
@@ -98,7 +95,7 @@ start_px4_instances() {
     mkdir -p /tmp/px4_instance1
     ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance1/etc
     ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance1/bin
-    export PX4_GZ_MODEL=x500
+    export PX4_GZ_MODEL=standard_vtol
     export PX4_GZ_MODEL_POSE="10,0,0,0,0,0"
     "$PX4_DIR/build/px4_sitl_default/bin/px4" \
         -i 1 \
