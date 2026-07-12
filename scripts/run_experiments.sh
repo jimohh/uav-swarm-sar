@@ -197,8 +197,6 @@ start_stack() {
 }
 
 
-}
-
 # --- Run a single trial ---
 run_trial() {
     local trial_id=$1
