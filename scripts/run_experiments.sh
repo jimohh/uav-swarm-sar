@@ -190,8 +190,11 @@ start_stack() {
 
     sleep 5
 
-    # Wait for EKF2 to converge and sensors to initialize before arming.
-    sleep 40
+    # Wait for EKF2 to converge using MAVSDK health polling (replaces fixed sleep 40)
+    python3 ~/thesis_ws/uav-swarm-sar/scripts/mavsdk_arm.py --port 14550 --uav_id 0 > "$LOG_DIR/arm_uav0.log" 2>&1 &
+    python3 ~/thesis_ws/uav-swarm-sar/scripts/mavsdk_arm.py --port 14560 --uav_id 1 > "$LOG_DIR/arm_uav1.log" 2>&1 &
+
+}
 
 
 }
