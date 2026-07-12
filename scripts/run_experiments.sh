@@ -29,14 +29,27 @@ source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
 
 # --- PX4 parameter overrides ---
-# NAV_DLL_ACT=0: disables "no GCS connection" arming check.
-# SIM_GZ_EN=1: forces Gazebo sensor pipeline. Without this, PX4 falls back
-# to its internal SIH simulator which doesn't publish accelerometer data,
-# causing "Accel 0 uncalibrated" and "Gyro 0 uncalibrated" pre-arm failures.
-# Both are applied via PX4_PARAM_* env vars which run AFTER the airframe file,
+# Applied via PX4_PARAM_* env vars which run AFTER the airframe file,
 # so they cannot be silently overwritten by airframe defaults.
+#
+# NAV_DLL_ACT=0    : disables "no GCS connection" arming check
+# SIM_GZ_EN=1      : forces Gazebo sensor pipeline (prevents SIH fallback
+#                    which caused accel/gyro timeout errors)
+# SYS_HAS_MAG=0    : no magnetometer required
+# SYS_HAS_BARO=0   : no barometer required
+# EKF2_MAG_TYPE=5  : disable EKF2 magnetic heading fusion
+# CBRK_SUPPLY_CHK  : disable power supply check
+# EKF2_GPS_CTRL=7  : enable GPS + GPS yaw fusion as heading source
+#                    (replaces magnetometer yaw — fixes "no heading reference")
+#                    NOTE: previously set to 0 which accidentally killed the
+#                    only available yaw source, causing persistent arming failure
 export PX4_PARAM_NAV_DLL_ACT=0
 export PX4_PARAM_SIM_GZ_EN=1
+export PX4_PARAM_SYS_HAS_MAG=0
+export PX4_PARAM_SYS_HAS_BARO=0
+export PX4_PARAM_EKF2_MAG_TYPE=5
+export PX4_PARAM_CBRK_SUPPLY_CHK=894281
+export PX4_PARAM_EKF2_GPS_CTRL=7
 
 # --- Hardened cleanup function ---
 cleanup_trial() {
