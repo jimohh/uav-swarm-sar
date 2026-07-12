@@ -29,20 +29,7 @@ source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
 
 # --- PX4 parameter overrides ---
-# Applied via PX4_PARAM_* env vars which run AFTER the airframe file,
-# so they cannot be silently overwritten by airframe defaults.
-#
-# NAV_DLL_ACT=0    : disables "no GCS connection" arming check
-# SIM_GZ_EN=1      : forces Gazebo sensor pipeline (prevents SIH fallback
-#                    which caused accel/gyro timeout errors)
-# SYS_HAS_MAG=0    : no magnetometer required
-# SYS_HAS_BARO=0   : no barometer required
-# EKF2_MAG_TYPE=5  : disable EKF2 magnetic heading fusion
-# CBRK_SUPPLY_CHK  : disable power supply check
-# EKF2_GPS_CTRL=7  : enable GPS + GPS yaw fusion as heading source
-#                    (replaces magnetometer yaw — fixes "no heading reference")
-#                    NOTE: previously set to 0 which accidentally killed the
-#                    only available yaw source, causing persistent arming failure
+# Applied AFTER the airframe file via PX4_PARAM_* env vars.
 export PX4_PARAM_NAV_DLL_ACT=0
 export PX4_PARAM_SIM_GZ_EN=1
 export PX4_PARAM_CBRK_SUPPLY_CHK=894281
@@ -78,24 +65,20 @@ arm_and_offboard() {
 
 # --- Start PX4 instances (3 UAVs: 2 quads + 1 plane) ---
 start_px4_instances() {
-    mkdir -p /tmp/px4_instance0
-    ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance0/etc
-    ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance0/bin
+    # UAV0 — use validated make target (handles Gazebo world + sensor init)
     export GZ_VERSION=harmonic
     export PX4_SIM_SPEED_FACTOR=1.0
     export HEADLESS=1
-    export PX4_GZ_MODEL=standard_vtol
-    export PX4_GZ_MODEL_POSE="0,0,0,0,0,0"
-    "$PX4_DIR/build/px4_sitl_default/bin/px4" \
-        -i 0 \
-        -s "$PX4_DIR/build/px4_sitl_default/etc/init.d-posix/rcS" \
-        -w /tmp/px4_instance0 > "$LOG_DIR/px4_uav0.log" 2>&1 &
-    sleep 15
+    cd "$PX4_DIR"
+    HEADLESS=1 PX4_SIM_SPEED_FACTOR=1.0 make px4_sitl gz_x500 \
+        > "$LOG_DIR/px4_uav0.log" 2>&1 &
+    sleep 20
 
+    # UAV1 — prebuilt binary, same gz_x500 model
     mkdir -p /tmp/px4_instance1
     ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance1/etc
     ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance1/bin
-    export PX4_GZ_MODEL=standard_vtol
+    export PX4_GZ_MODEL=x500
     export PX4_GZ_MODEL_POSE="10,0,0,0,0,0"
     "$PX4_DIR/build/px4_sitl_default/bin/px4" \
         -i 1 \
@@ -103,6 +86,7 @@ start_px4_instances() {
         -w /tmp/px4_instance1 > "$LOG_DIR/px4_uav1.log" 2>&1 &
     sleep 10
 
+    # UAV2 — standard_vtol (self-arms via plane_bridge)
     mkdir -p /tmp/px4_instance2
     ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance2/etc
     ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance2/bin
@@ -114,6 +98,7 @@ start_px4_instances() {
         -w /tmp/px4_instance2 > "$LOG_DIR/px4_uav2.log" 2>&1 &
     sleep 10
     unset PX4_GZ_MODEL
+    cd ~/thesis_ws/uav-swarm-sar
 }
 
 # --- Start MAVROS (3 UAVs) ---
@@ -193,8 +178,6 @@ start_stack() {
     sleep 5
 
     # Wait for EKF2 to converge and sensors to initialize before arming.
-    # Increased from 20s: this is the first time Gazebo sensors have been
-    # working correctly (SIM_GZ_EN fix), so EKF2 needs real convergence time.
     sleep 40
 
     # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
