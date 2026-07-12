@@ -25,6 +25,7 @@ mkdir -p "$RESULTS_DIR"/{urban,wilderness,maritime}
 mkdir -p "$LOG_DIR"
 
 source /opt/ros/humble/setup.bash
+source ~/thesis_ws/install/setup.bash
 source "$WS_DIR/install/setup.bash"
 export PYTHONUNBUFFERED=1
 
