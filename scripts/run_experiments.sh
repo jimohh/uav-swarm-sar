@@ -45,11 +45,7 @@ export PYTHONUNBUFFERED=1
 #                    only available yaw source, causing persistent arming failure
 export PX4_PARAM_NAV_DLL_ACT=0
 export PX4_PARAM_SIM_GZ_EN=1
-export PX4_PARAM_SYS_HAS_MAG=0
-export PX4_PARAM_SYS_HAS_BARO=0
-export PX4_PARAM_EKF2_MAG_TYPE=5
 export PX4_PARAM_CBRK_SUPPLY_CHK=894281
-export PX4_PARAM_EKF2_GPS_CTRL=7
 
 # --- Hardened cleanup function ---
 cleanup_trial() {
