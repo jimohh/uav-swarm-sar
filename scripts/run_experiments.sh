@@ -43,6 +43,7 @@ cleanup_trial() {
     pkill -9 -f "parameter_bridge" 2>/dev/null || true
     pkill -9 -f "ruby"             2>/dev/null || true
     pkill -9 -f "sar_planning"     2>/dev/null || true
+    pkill -9 -f "mavsdk_arm.py"    2>/dev/null || true
 
     rm -rf /tmp/px4_instance0 /tmp/px4_instance1 /tmp/px4_instance2 2>/dev/null || true
     rm -f  /tmp/px4_lock* /tmp/.px4* 2>/dev/null || true
