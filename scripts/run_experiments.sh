@@ -63,6 +63,9 @@ cleanup_trial() {
     rm -f  /tmp/px4_lock* /tmp/.px4* 2>/dev/null || true
     rm -rf "$PX4_DIR/build/px4_sitl_default/rootfs/lock" 2>/dev/null || true
 
+    # Wipe stale PX4 parameter files to force clean boot every trial
+    find "$PX4_DIR/build/px4_sitl_default" -name "parameters*.bson" -delete 2>/dev/null || true
+    
     sleep 5
 }
 
