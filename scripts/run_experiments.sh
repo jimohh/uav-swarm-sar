@@ -158,16 +158,22 @@ start_stack() {
 
     case "$planner" in
         apf)
+            ros2 run sar_planning quad_bridge --ros-args -p uav_id:=0 > "$LOG_DIR/qb_uav0.log" 2>&1 &
+            ros2 run sar_planning quad_bridge --ros-args -p uav_id:=1 > "$LOG_DIR/qb_uav1.log" 2>&1 &
             ros2 run sar_planning apf_navigator --ros-args -p uav_id:=0 > "$LOG_DIR/nav_uav0.log" 2>&1 &
             ros2 run sar_planning apf_navigator --ros-args -p uav_id:=1 > "$LOG_DIR/nav_uav1.log" 2>&1 &
             ;;
         vfh)
+            ros2 run sar_planning quad_bridge --ros-args -p uav_id:=0 > "$LOG_DIR/qb_uav0.log" 2>&1 &
+            ros2 run sar_planning quad_bridge --ros-args -p uav_id:=1 > "$LOG_DIR/qb_uav1.log" 2>&1 &   
             ros2 run sar_planning apf_navigator --ros-args -p uav_id:=0 > "$LOG_DIR/nav_uav0.log" 2>&1 &
             ros2 run sar_planning apf_navigator --ros-args -p uav_id:=1 > "$LOG_DIR/nav_uav1.log" 2>&1 &
             ros2 run sar_planning vfh_navigator --ros-args -p uav_id:=0 > "$LOG_DIR/vfh_uav0.log" 2>&1 &
             ros2 run sar_planning vfh_navigator --ros-args -p uav_id:=1 > "$LOG_DIR/vfh_uav1.log" 2>&1 &
             ;;
         rrtstar)
+            ros2 run sar_planning quad_bridge --ros-args -p uav_id:=0 > "$LOG_DIR/qb_uav0.log" 2>&1 &
+            ros2 run sar_planning quad_bridge --ros-args -p uav_id:=1 > "$LOG_DIR/qb_uav1.log" 2>&1 &
             ros2 run sar_planning apf_navigator --ros-args -p uav_id:=0 > "$LOG_DIR/nav_uav0.log" 2>&1 &
             ros2 run sar_planning apf_navigator --ros-args -p uav_id:=1 > "$LOG_DIR/nav_uav1.log" 2>&1 &
             ros2 run sar_planning vfh_navigator --ros-args -p uav_id:=0 > "$LOG_DIR/vfh_uav0.log" 2>&1 &
@@ -186,10 +192,7 @@ start_stack() {
     # Wait for EKF2 to converge and sensors to initialize before arming.
     sleep 40
 
-    # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
-    # UAV0/UAV1 quads have no such logic in apf_navigator — do it here.
-    arm_and_offboard 0
-    arm_and_offboard 1
+
 }
 
 # --- Run a single trial ---
