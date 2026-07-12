@@ -65,25 +65,31 @@ arm_and_offboard() {
 
 # --- Start PX4 instances (3 UAVs: 2 quads + 1 plane) ---
 start_px4_instances() {
-    # UAV0 — use validated make target (handles Gazebo world + sensor init)
+    # UAV0 — standard_vtol (flies as quadrotor, has magnetometer)
+    mkdir -p /tmp/px4_instance0
+    ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance0/etc
+    ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance0/bin
     export GZ_VERSION=harmonic
     export PX4_SIM_SPEED_FACTOR=1.0
     export HEADLESS=1
-    cd "$PX4_DIR"
-    HEADLESS=1 PX4_SIM_SPEED_FACTOR=1.0 make px4_sitl gz_x500 \
-        > "$LOG_DIR/px4_uav0.log" 2>&1 &
-    sleep 20
+    export PX4_GZ_MODEL=standard_vtol
+    export PX4_GZ_MODEL_POSE="0,0,0,0,0,0"
+    "$PX4_DIR/build/px4_sitl_default/bin/px4" \
+        -i 0 \
+        -s "$PX4_DIR/build/px4_sitl_default/etc/init.d-posix/rcS" \
+        -w /tmp/px4_instance0 > "$LOG_DIR/px4_uav0.log" 2>&1 &
+    sleep 15
 
-    # UAV1 — prebuilt binary, same gz_x500 model
+    # UAV1 — standard_vtol (flies as quadrotor, has magnetometer)
     mkdir -p /tmp/px4_instance1
     ln -sf "$PX4_DIR/build/px4_sitl_default/etc" /tmp/px4_instance1/etc
     ln -sf "$PX4_DIR/build/px4_sitl_default/bin" /tmp/px4_instance1/bin
-    export PX4_GZ_MODEL=x500
+    export PX4_GZ_MODEL=standard_vtol
     export PX4_GZ_MODEL_POSE="10,0,0,0,0,0"
     "$PX4_DIR/build/px4_sitl_default/bin/px4" \
-        -i 1 \
-        -s "$PX4_DIR/build/px4_sitl_default/etc/init.d-posix/rcS" \
-        -w /tmp/px4_instance1 > "$LOG_DIR/px4_uav1.log" 2>&1 &
+    -i 1 \
+    -s "$PX4_DIR/build/px4_sitl_default/etc/init.d-posix/rcS" \
+    -w /tmp/px4_instance1 > "$LOG_DIR/px4_uav1.log" 2>&1 &
     sleep 10
 
     # UAV2 — standard_vtol (self-arms via plane_bridge)
