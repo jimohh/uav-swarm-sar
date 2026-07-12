@@ -181,7 +181,9 @@ start_stack() {
     sleep 5
 
     # Wait for EKF2 to converge and sensors to initialize before arming.
-    sleep 20
+    # Increased from 20s: this is the first time Gazebo sensors have been
+    # working correctly (SIM_GZ_EN fix), so EKF2 needs real convergence time.
+    sleep 40
 
     # UAV2 (plane_bridge) already self-arms and switches to OFFBOARD.
     # UAV0/UAV1 quads have no such logic in apf_navigator — do it here.
