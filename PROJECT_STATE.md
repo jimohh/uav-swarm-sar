@@ -234,3 +234,41 @@ ekf_node
 - `~/thesis_ws/analysis/figures/heatmap_performance.png`
 - `~/thesis_ws/analysis/summary_stats.csv`
 - `~/thesis_ws/analysis/anova_results.txt`
+
+
+## Session July 11-12 2026 — Major Debugging Findings
+
+### Root causes of non-arming (all confirmed from PX4 source code):
+
+1. MAVROS heartbeat type was ONBOARD_CONTROLLER, not GCS
+   → Fixed: heartbeat_mav_type:=GCS in all MAVROS launches
+
+2. PX4_SIM_SPEED_FACTOR env var caused SIH (internal) simulator
+   instead of Gazebo sensor pipeline
+   → Fixed: PX4_PARAM_SIM_GZ_EN=1 env var
+
+3. No accelerometer auto-calibration at boot (gyro had it, accel didn't)
+   → Fixed: commander calibrate accel quick added to rcS
+
+4. Gazebo gz_x500 model has NO magnetometer sensor
+   → EKF2 has no heading source → "no heading reference" arming block
+   → Fix: switched UAV0/UAV1 to standard_vtol model (has magnetometer)
+
+5. arm_and_offboard() bash service call fires at fixed time before
+   EKF2 yaw has converged
+   → Chosen fix: MAVSDK mavsdk_arm.py with health.is_armable wait
+
+### Batch data status:
+- ALL previous batch data INVALID (quadrotors never armed/flew)
+- Must run clean 5-trial batch from scratch once arming is fixed
+- coverage_rate was frozen at ~0.001 in all prior runs
+
+### Next action:
+- Install MAVSDK, write mavsdk_arm.py, smoke test, full batch
+- See summary for exact steps
+
+### quad_bridge.py — abandoned approach
+- Written and built successfully but never launched correctly due to
+  source path issue in run_experiments.sh
+- SUPERSEDED by mavsdk_arm.py approach
+- Can be deleted from the repo or left as dead code — does not affect anything
