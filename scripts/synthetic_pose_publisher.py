@@ -195,7 +195,7 @@ class SyntheticPosePublisher(Node):
         dt = 1.0 / TICK_HZ
         now = self.get_clock().now().to_msg()
 
-        if not self.goal_sent and elapsed > 1.0:
+        if not self.goal_sent and elapsed > 2.0:
             self._send_goal()
             self.goal_sent = True
 
