@@ -55,7 +55,7 @@ run_apf() {
 
     ros2 run sar_planning apf_navigator --ros-args -p uav_id:="$UAV_ID" \
         > "$LOG_DIR/nav_apf_${scenario}.log" 2>&1 &
-    sleep 2
+    sleep 5
 
     python3 ~/thesis_ws/uav-swarm-sar/scripts/synthetic_pose_publisher.py \
         --uav_id "$UAV_ID" --mode apf --scenario "$scenario" --results_dir "$RESULTS_DIR" \
@@ -75,7 +75,7 @@ run_apf_vfh() {
         > "$LOG_DIR/nav_apfvfh_${scenario}.log" 2>&1 &
     ros2 run sar_planning vfh_navigator --ros-args -p uav_id:="$UAV_ID" \
         > "$LOG_DIR/vfh_apfvfh_${scenario}.log" 2>&1 &
-    sleep 2
+    sleep 5
 
     python3 ~/thesis_ws/uav-swarm-sar/scripts/synthetic_pose_publisher.py \
         --uav_id "$UAV_ID" --mode vfh --scenario "$scenario" --results_dir "$RESULTS_DIR" \
@@ -97,7 +97,7 @@ run_full_hierarchy() {
         > "$LOG_DIR/vfh_full_${scenario}.log" 2>&1 &
     ros2 run sar_planning rrtstar_planner --ros-args -p uav_id:="$UAV_ID" \
         > "$LOG_DIR/rrt_full_${scenario}.log" 2>&1 &
-    sleep 2
+    sleep 5
 
     # Physics/motion integration happens via VFH+'s cmd_vel, same as apf_vfh tier
     python3 ~/thesis_ws/uav-swarm-sar/scripts/synthetic_pose_publisher.py \
