@@ -1,0 +1,123 @@
+[0.000000] (-) TimerEvent: {}
+[0.000500] (sar_planning) JobQueued: {'identifier': 'sar_planning', 'dependencies': OrderedDict()}
+[0.001242] (sar_planning) JobStarted: {'identifier': 'sar_planning'}
+[0.099927] (-) TimerEvent: {}
+[0.200269] (-) TimerEvent: {}
+[0.300636] (-) TimerEvent: {}
+[0.401366] (-) TimerEvent: {}
+[0.501839] (-) TimerEvent: {}
+[0.602270] (-) TimerEvent: {}
+[0.702693] (-) TimerEvent: {}
+[0.803092] (-) TimerEvent: {}
+[0.903466] (-) TimerEvent: {}
+[1.003835] (-) TimerEvent: {}
+[1.104706] (-) TimerEvent: {}
+[1.205310] (-) TimerEvent: {}
+[1.305805] (-) TimerEvent: {}
+[1.406246] (-) TimerEvent: {}
+[1.506782] (-) TimerEvent: {}
+[1.554733] (sar_planning) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/sar_planning', 'build', '--build-base', '/home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build', 'install', '--record', '/home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/install.log', '--install-scripts', '$base/lib/sar_planning', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/ubuntu/uav-swarm-sar/ros2_ws/src/sar_planning', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'ubuntu', 'XDG_SESSION_TYPE': 'x11', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'HOME': '/home/ubuntu', 'OLDPWD': '/home/ubuntu', 'DESKTOP_SESSION': 'ubuntu', 'ROS_PYTHON_VERSION': '3', 'GNOME_SHELL_SESSION_MODE': 'ubuntu', 'GTK_MODULES': 'gail:atk-bridge', 'SYSTEMD_EXEC_PID': '5629', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/999/bus', 'COLORTERM': 'truecolor', 'IM_CONFIG_PHASE': '1', 'ROS_DISTRO': 'humble', 'GTK_IM_MODULE': 'ibus', 'LOGNAME': 'ubuntu', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'USERNAME': 'ubuntu', 'TERM': 'xterm-256color', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'ROS_LOCALHOST_ONLY': '0', 'WINDOWPATH': '2', 'PATH': '/opt/ros/humble/bin:/opt/gcc-arm-none-eabi-9-2020-q2-update/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin', 'SESSION_MANAGER': 'local/ubuntu:@/tmp/.ICE-unix/5575,unix/ubuntu:/tmp/.ICE-unix/5575', 'XDG_MENU_PREFIX': 'gnome-', 'GNOME_TERMINAL_SCREEN': '/org/gnome/Terminal/screen/e120485b_fd2f_48bc_9ab7_785e45563917', 'XDG_RUNTIME_DIR': '/run/user/999', 'DISPLAY': ':0', 'LANG': 'en_US.UTF-8', 'XDG_CURRENT_DESKTOP': 'ubuntu:GNOME', 'XMODIFIERS': '@im=ibus', 'XDG_SESSION_DESKTOP': 'ubuntu', 'XAUTHORITY': '/run/user/999/gdm/Xauthority', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'GNOME_TERMINAL_SERVICE': ':1.185', 'SSH_AGENT_LAUNCHER': 'gnome-keyring', 'SSH_AUTH_SOCK': '/run/user/999/keyring/ssh', 'AMENT_PREFIX_PATH': '/opt/ros/humble', 'SHELL': '/bin/bash', 'QT_ACCESSIBILITY': '1', 'GDMSESSION': 'ubuntu', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'GPG_AGENT_INFO': '/run/user/999/gnupg/S.gpg-agent:0:1', 'QT_IM_MODULE': 'ibus', 'PWD': '/home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning', 'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/etc/xdg', 'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'VTE_VERSION': '6800'}, 'shell': False}
+[1.606909] (-) TimerEvent: {}
+[1.707283] (-) TimerEvent: {}
+[1.807646] (-) TimerEvent: {}
+[1.858088] (sar_planning) StdoutLine: {'line': b'running egg_info\n'}
+[1.858656] (sar_planning) StdoutLine: {'line': b'creating ../../build/sar_planning/sar_planning.egg-info\n'}
+[1.858954] (sar_planning) StdoutLine: {'line': b'writing ../../build/sar_planning/sar_planning.egg-info/PKG-INFO\n'}
+[1.859288] (sar_planning) StdoutLine: {'line': b'writing dependency_links to ../../build/sar_planning/sar_planning.egg-info/dependency_links.txt\n'}
+[1.859601] (sar_planning) StdoutLine: {'line': b'writing entry points to ../../build/sar_planning/sar_planning.egg-info/entry_points.txt\n'}
+[1.859786] (sar_planning) StdoutLine: {'line': b'writing requirements to ../../build/sar_planning/sar_planning.egg-info/requires.txt\n'}
+[1.859920] (sar_planning) StdoutLine: {'line': b'writing top-level names to ../../build/sar_planning/sar_planning.egg-info/top_level.txt\n'}
+[1.860108] (sar_planning) StdoutLine: {'line': b"writing manifest file '../../build/sar_planning/sar_planning.egg-info/SOURCES.txt'\n"}
+[1.877166] (sar_planning) StdoutLine: {'line': b"reading manifest file '../../build/sar_planning/sar_planning.egg-info/SOURCES.txt'\n"}
+[1.877923] (sar_planning) StdoutLine: {'line': b"writing manifest file '../../build/sar_planning/sar_planning.egg-info/SOURCES.txt'\n"}
+[1.878146] (sar_planning) StdoutLine: {'line': b'running build\n'}
+[1.878278] (sar_planning) StdoutLine: {'line': b'running build_py\n'}
+[1.878416] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build\n'}
+[1.878571] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib\n'}
+[1.878658] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.878798] (sar_planning) StdoutLine: {'line': b'copying sar_planning/probability_map_node.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.907883] (-) TimerEvent: {}
+[1.912393] (sar_planning) StdoutLine: {'line': b'copying sar_planning/rf_doppler_stub.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.913462] (sar_planning) StdoutLine: {'line': b'copying sar_planning/plane_bridge.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.914456] (sar_planning) StdoutLine: {'line': b'copying sar_planning/metrics_logger.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.915188] (sar_planning) StdoutLine: {'line': b'copying sar_planning/quad_bridge.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.915857] (sar_planning) StdoutLine: {'line': b'copying sar_planning/rrtstar_planner.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.917108] (sar_planning) StdoutLine: {'line': b'copying sar_planning/experiment_runner.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.917755] (sar_planning) StdoutLine: {'line': b'copying sar_planning/yolo11s_detector.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.918519] (sar_planning) StdoutLine: {'line': b'copying sar_planning/ekf_node.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.919244] (sar_planning) StdoutLine: {'line': b'copying sar_planning/vfh_navigator.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.920158] (sar_planning) StdoutLine: {'line': b'copying sar_planning/__init__.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.920333] (sar_planning) StdoutLine: {'line': b'copying sar_planning/apf_navigator.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.920991] (sar_planning) StdoutLine: {'line': b'copying sar_planning/thermal_camera_node.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.921522] (sar_planning) StdoutLine: {'line': b'copying sar_planning/cnp_coordinator.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.922353] (sar_planning) StdoutLine: {'line': b'copying sar_planning/heartbeat_monitor.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.923065] (sar_planning) StdoutLine: {'line': b'copying sar_planning/waypoint_selector.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning\n'}
+[1.923914] (sar_planning) StdoutLine: {'line': b'running install\n'}
+[1.924447] (sar_planning) StdoutLine: {'line': b'running install_lib\n'}
+[1.925577] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.925752] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/probability_map_node.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.925996] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/rf_doppler_stub.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.926191] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/plane_bridge.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.926445] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/metrics_logger.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.926687] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/quad_bridge.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.926896] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/rrtstar_planner.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.927110] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/experiment_runner.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.927313] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/yolo11s_detector.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.927530] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/ekf_node.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.927761] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/vfh_navigator.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.927983] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/__init__.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.928254] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/apf_navigator.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.928459] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/thermal_camera_node.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.928690] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/cnp_coordinator.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.928917] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/heartbeat_monitor.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.929146] (sar_planning) StdoutLine: {'line': b'copying /home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/build/lib/sar_planning/waypoint_selector.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning\n'}
+[1.929790] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/probability_map_node.py to probability_map_node.cpython-310.pyc\n'}
+[1.931917] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/rf_doppler_stub.py to rf_doppler_stub.cpython-310.pyc\n'}
+[1.932707] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/plane_bridge.py to plane_bridge.cpython-310.pyc\n'}
+[1.935090] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/metrics_logger.py to metrics_logger.cpython-310.pyc\n'}
+[1.936551] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/quad_bridge.py to quad_bridge.cpython-310.pyc\n'}
+[1.937564] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/rrtstar_planner.py to rrtstar_planner.cpython-310.pyc\n'}
+[1.941927] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/experiment_runner.py to experiment_runner.cpython-310.pyc\n'}
+[1.943045] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/yolo11s_detector.py to yolo11s_detector.cpython-310.pyc\n'}
+[1.944478] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/ekf_node.py to ekf_node.cpython-310.pyc\n'}
+[1.946108] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/vfh_navigator.py to vfh_navigator.cpython-310.pyc\n'}
+[1.948124] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/__init__.py to __init__.cpython-310.pyc\n'}
+[1.948493] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/apf_navigator.py to apf_navigator.cpython-310.pyc\n'}
+[1.949789] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/thermal_camera_node.py to thermal_camera_node.cpython-310.pyc\n'}
+[1.950529] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/cnp_coordinator.py to cnp_coordinator.cpython-310.pyc\n'}
+[1.952346] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/heartbeat_monitor.py to heartbeat_monitor.cpython-310.pyc\n'}
+[1.953904] (sar_planning) StdoutLine: {'line': b'byte-compiling /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning/waypoint_selector.py to waypoint_selector.cpython-310.pyc\n'}
+[1.954554] (sar_planning) StdoutLine: {'line': b'running install_data\n'}
+[1.954793] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/ament_index\n'}
+[1.954962] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/ament_index/resource_index\n'}
+[1.955077] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/ament_index/resource_index/packages\n'}
+[1.955253] (sar_planning) StdoutLine: {'line': b'copying resource/sar_planning -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/ament_index/resource_index/packages\n'}
+[1.955398] (sar_planning) StdoutLine: {'line': b'copying package.xml -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/sar_planning\n'}
+[1.955559] (sar_planning) StdoutLine: {'line': b'creating /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/sar_planning/launch\n'}
+[1.955622] (sar_planning) StdoutLine: {'line': b'copying launch/multi_uav_launch.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/sar_planning/launch\n'}
+[1.966805] (sar_planning) StdoutLine: {'line': b'copying launch/nav_stack.launch.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/sar_planning/launch\n'}
+[1.967688] (sar_planning) StdoutLine: {'line': b'copying launch/planning_stack.launch.py -> /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/share/sar_planning/launch\n'}
+[1.968339] (sar_planning) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.971099] (sar_planning) StdoutLine: {'line': b'Copying ../../build/sar_planning/sar_planning.egg-info to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/python3.10/site-packages/sar_planning-0.0.0-py3.10.egg-info\n'}
+[1.972569] (sar_planning) StdoutLine: {'line': b'running install_scripts\n'}
+[1.993903] (sar_planning) StdoutLine: {'line': b'Installing apf_navigator script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994112] (sar_planning) StdoutLine: {'line': b'Installing cnp_coordinator script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994281] (sar_planning) StdoutLine: {'line': b'Installing ekf_node script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994417] (sar_planning) StdoutLine: {'line': b'Installing experiment_runner script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994543] (sar_planning) StdoutLine: {'line': b'Installing heartbeat_monitor script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994678] (sar_planning) StdoutLine: {'line': b'Installing metrics_logger script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994818] (sar_planning) StdoutLine: {'line': b'Installing plane_bridge script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.994920] (sar_planning) StdoutLine: {'line': b'Installing probability_map_node script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.995026] (sar_planning) StdoutLine: {'line': b'Installing quad_bridge script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.995168] (sar_planning) StdoutLine: {'line': b'Installing rf_doppler_stub script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.995399] (sar_planning) StdoutLine: {'line': b'Installing rrtstar_planner script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.995579] (sar_planning) StdoutLine: {'line': b'Installing thermal_camera_node script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.995783] (sar_planning) StdoutLine: {'line': b'Installing vfh_navigator script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.995999] (sar_planning) StdoutLine: {'line': b'Installing waypoint_selector script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.996167] (sar_planning) StdoutLine: {'line': b'Installing yolo11s_detector script to /home/ubuntu/uav-swarm-sar/ros2_ws/install/sar_planning/lib/sar_planning\n'}
+[1.996754] (sar_planning) StdoutLine: {'line': b"writing list of installed files to '/home/ubuntu/uav-swarm-sar/ros2_ws/build/sar_planning/install.log'\n"}
+[2.007998] (-) TimerEvent: {}
+[2.023865] (sar_planning) CommandEnded: {'returncode': 0}
+[2.108103] (-) TimerEvent: {}
+[2.153228] (sar_planning) JobEnded: {'identifier': 'sar_planning', 'rc': 0}
+[2.154186] (-) EventReactorShutdown: {}

@@ -1,0 +1,17 @@
+[console_scripts]
+apf_navigator = sar_planning.apf_navigator:main
+cnp_coordinator = sar_planning.cnp_coordinator:main
+ekf_node = sar_planning.ekf_node:main
+experiment_runner = sar_planning.experiment_runner:main
+heartbeat_monitor = sar_planning.heartbeat_monitor:main
+metrics_logger = sar_planning.metrics_logger:main
+plane_bridge = sar_planning.plane_bridge:main
+probability_map_node = sar_planning.probability_map_node:main
+quad_bridge = sar_planning.quad_bridge:main
+rf_doppler_stub = sar_planning.rf_doppler_stub:main
+rrtstar_planner = sar_planning.rrtstar_planner:main
+thermal_camera_node = sar_planning.thermal_camera_node:main
+vfh_navigator = sar_planning.vfh_navigator:main
+waypoint_selector = sar_planning.waypoint_selector:main
+yolo11s_detector = sar_planning.yolo11s_detector:main
+
